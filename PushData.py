@@ -7,12 +7,11 @@ def insert_fake_data(cursor, conn, table_name, schema, num_rows=10, inserted_ref
         inserted_refs = {}
 
     print(f"\n--- Inserting into `{table_name}` ---")
-    
-    # Filter out 'id' column
+   
     columns = [col[0] for col in schema if col[0].lower() != 'id']
     types = [col[1] for col in schema if col[0].lower() != 'id']
 
-    # Handle foreign keys
+
     foreign_keys = get_foreign_keys(cursor, table_name)
     foreign_key_values = {}
 
@@ -38,7 +37,7 @@ def insert_fake_data(cursor, conn, table_name, schema, num_rows=10, inserted_ref
                 if fk_vals:
                     values.append(random.choice(fk_vals))
                 else:
-                    print(f"⚠️ Warning: No values for foreign key column `{col}`. Inserting NULL.")
+                    print(f" Warning: No values for foreign key column `{col}`. Inserting NULL.")
                     values.append(None)
             else:
                 values.append(generate_fake_value(col, typ))
@@ -52,7 +51,7 @@ def insert_fake_data(cursor, conn, table_name, schema, num_rows=10, inserted_ref
     print(f"{num_rows} rows inserted into `{table_name}`")
     print(f"Inserted IDs for `{table_name}`: {inserted_ids}")
 
-    # Verification
+ 
     if inserted_ids:
         cursor.execute(
             f"SELECT * FROM {table_name} WHERE id IN ({','.join(map(str, inserted_ids))})"
@@ -63,7 +62,7 @@ def insert_fake_data(cursor, conn, table_name, schema, num_rows=10, inserted_ref
 
     inserted_refs[table_name] = inserted_ids
 
-    # Insert into child tables (optional recursive)
+
     child_fks = get_child_tables(cursor, table_name)
     for child_table, col_name, ref_col in child_fks:
         child_schema = get_table_schema(cursor, child_table)
