@@ -27,7 +27,7 @@ def insert_fake_data(cursor, conn, table_name, schema, num_rows=10, inserted_ref
         values = fetch_foreign_key_values(cursor, ref_table, ref_col)
         foreign_key_values[col_name] = values
 
-    # Insert data
+  
     inserted_ids = []
     for _ in range(num_rows):
         values = []
